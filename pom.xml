@@ -24,14 +24,14 @@
                 <repository>
                         <id>1</id>
                         <name>Dépôt d’entreprise</name>
-                        <url>http://localhost:8081/nexus/content/repositories/localrepository/</url>
+                        <url>http://sic.emi.ac.ma:8081/nexus/content/repositories/localrepository/</url>
                 </repository>
 
                 <!-- Publish snapshots here -->
                 <snapshotRepository>
                       <id>1</id>
                         <name>Dépôt d’entreprise</name>
-                        <url>http://localhost:8081/nexus/content/repositories/localrepository/</url>
+                        <url>http://sic.emi.ac.ma:8081/nexus/content/repositories/localrepository/</url>
                 </snapshotRepository>
 </distributionManagement>
     <dependencies>
