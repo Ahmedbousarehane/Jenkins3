@@ -33,7 +33,16 @@
 					}
 	}
 			}
-			
+			stage ('generate documentation') {
+				steps {
+					bat 'mvn javadoc:javadoc'
+				}
+				post{
+					success{
+						step([$class: 'JavadocArchiver', javadocDir: 'target/site/apidocs', keepAll: false])
+					}
+				}
+			}
 			stage('package'){
 				steps{
 					bat 'mvn package'
@@ -41,14 +50,19 @@
 
 			}
 			
-			             stage('Analyse statique') {
-                 steps{
-                        bat 'mvn checkstyle:checkstyle findbugs:findbugs'
-                        checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '**/checkstyle-result.xml', unHealthy: ''
-                         findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
+			stage('Analyse statique') {
+                 		steps{
+                        		bat 'mvn checkstyle:checkstyle findbugs:findbugs'
+                        		checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '**/checkstyle-result.xml', unHealthy: ''
+                         		findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
 
-                 }
-}
+                		 }
+			}
+		    	stage('Publish') {
+			 steps{
+				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: 'target/spring-petclinic-1.5.1.jar']], mavenCoordinate: [artifactId: 'spring-petclinic', groupId: 'org.springframework.samples', packaging: 'jar', version: '1.5.10']]]
+			   }
+		  	}
 		    
 			}
 	}
